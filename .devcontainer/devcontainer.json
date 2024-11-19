@@ -3,6 +3,6 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "test",
   "workspaceFolder": "/opt/app",
-  // "remoteUser": "atoru",
-  "updateRemoteUserUID": false,
+  "remoteUser": "node",
+//  "updateRemoteUserUID": false,
 }

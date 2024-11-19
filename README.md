@@ -1,4 +1,5 @@
 <h1>docker non root user</h1>
+
 コンテナのユーザーとホストのユーザーを合わせる。
 
 [Visual Studio Code リモート開発を使用して開発コンテナを作成する](https://code.visualstudio.com/docs/devcontainers/create-dev-container#_extend-your-docker-compose-file-for-development)
@@ -14,6 +15,7 @@
 - [Dockerfie](#dockerfie)
 - [docker-compose.yml](#docker-composeyml)
 - [vscode よりコンテナ起動](#vscode-よりコンテナ起動)
+- [vscode の機能を使ってユーザーを指定する](#vscode-の機能を使ってユーザーを指定する)
 
 # フォルダ構成
 
@@ -169,3 +171,79 @@ drwxr-xr-x  3 atoru atoru 4096 11月 19 15:23 .devcontainer
 ```
 
 コンテナで作成したファイルの権限がホストのユーザーとなっている。これで OK。
+
+# vscode の機能を使ってユーザーを指定する
+
+node:lts-buster の user id:1000 は node という名前なので、これを`
+  "remoteUser": "node",`と指定する。updateRemoteUserUID はデフォルトで true となる。
+
+こうすると、user id:1000 でコンテナが起動した。オーバーヘッドが大きいようだが、ファイル数が数万とかならなければ、あまり気にならない。コンテナビルドに時間がかかるようなら、上記の手法を使う。:w
+
+devcontainer.json
+
+```
+{
+  "name": "Amplify Vue3",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "test",
+  "workspaceFolder": "/opt/app",
+  "remoteUser": "node",
+//  "updateRemoteUserUID": false,
+}
+```
+
+Dockerfile
+
+```
+web $ cat Dockerfile
+FROM node:lts-buster
+
+RUN apt-get update
+#    apt-get install vim -y && \
+#    groupadd -g 1000 app_user && \
+#    useradd -m -s /bin/bash -u 1000 -g 1000 app_user
+#RUN mkdir -p /opt/app && chown -R app_user:app_user /opt/app
+#RUN mkdir -p /opt/app && chown -R 1000:1000 /opt/app
+WORKDIR /opt/app
+
+#USER app_user
+#USER 1000
+```
+
+docker-compose.yml
+
+```
+services:
+  test:
+    build:
+      dockerfile: ./web/Dockerfile
+    stdin_open: true
+    tty: true
+    working_dir: '/opt/app'
+    volumes:
+      - ..:/opt/app
+      # - ./app:/opt/app
+      #- ~/.aws/:/root/.aws/
+      #    user: "1000:1000"
+```
+
+実験
+
+`./app:/opt/app`とすると、ホストの`./app`はルート権限となる。docker-compose.yml で新しいフォルダを作るとユーザー権限ではアクセスできなくなる。
+
+docker-compose.yml
+
+```
+services:
+  test:
+    build:
+      dockerfile: ./web/Dockerfile
+    stdin_open: true
+    tty: true
+    working_dir: '/opt/app'
+    volumes:
+     # - ..:/opt/app
+      - ./app:/opt/app
+        #- ~/.aws/:/root/.aws/
+#    user: "1000:1000"
+```

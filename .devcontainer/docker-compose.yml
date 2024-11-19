@@ -7,6 +7,6 @@ services:
     working_dir: '/opt/app'
     volumes:
       - ..:/opt/app
-        # - ./app:/opt/app
-        #- ~/.aws/:/root/.aws/
-    user: "1000:1000"
+      # - ./app:/opt/app
+      #- ~/.aws/:/root/.aws/
+      #    user: "1000:1000"
