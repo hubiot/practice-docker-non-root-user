@@ -1,0 +1,12 @@
+services:
+  test:
+    build:
+      dockerfile: ./web/Dockerfile
+    stdin_open: true
+    tty: true
+    working_dir: '/opt/app'
+    volumes:
+      - ..:/opt/app
+        # - ./app:/opt/app
+        #- ~/.aws/:/root/.aws/
+    user: "1000:1000"

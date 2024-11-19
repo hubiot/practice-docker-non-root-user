@@ -1,0 +1,8 @@
+{
+  "name": "Amplify Vue3",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "test",
+  "workspaceFolder": "/opt/app",
+  // "remoteUser": "atoru",
+  "updateRemoteUserUID": false,
+}
