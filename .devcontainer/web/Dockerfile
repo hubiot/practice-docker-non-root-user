@@ -9,5 +9,5 @@ RUN apt-get update
 WORKDIR /opt/app
 
 #USER app_user
-#USER 1000
+USER node
 

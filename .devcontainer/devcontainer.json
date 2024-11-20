@@ -4,5 +4,5 @@
   "service": "test",
   "workspaceFolder": "/opt/app",
   "remoteUser": "node",
-//  "updateRemoteUserUID": false,
+  "updateRemoteUserUID": false
 }
