@@ -32,6 +32,14 @@ test2
       |--Dockerfile
 ```
 
+※ Dockerfile を.devcontaier の直下に置くと vscode で、コンテナで再度開くとすると、コンテナが起動しない。
+`docker-compose -up d`ではちゃんと動作する。
+
+何度も以下のメッセージがでて、先に進まなくなる。
+![alt text](images/image-4.png)
+
+原因は不明。2024/11/22
+
 # ホストとコンテナのユーザー ID を調べる
 
 この作業は、vscode の機能を使うときも、使わないときも必要。
